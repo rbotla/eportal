@@ -11,18 +11,24 @@ function editEvent(event) {
 
 
 function getCommsForDate(sDate, eDate) {
-    let fComms = comms.filter( x => sDate.getTime() === new Date(x.date).getTime() ) // Filter comms for the date that the user clicked on
-    fComms = fComms.map( (x, i) => {
-            return {
-                id: i,
-                name: x.title,
-                location: '',
-                startDate: new Date(x.date),
-                color: 'red',
-                endDate: new Date(x.date)
-            }
-        })
-    $('#calendar').data('calendar').setDataSource(fComms);
+    $.ajax({
+        url: "https://my-json-server.typicode.com/rbotla/eportal/comms"
+    }).then(function(data) {
+        console.log(data);
+        let fComms = data.filter( x => sDate.getTime() === new Date(x.date).getTime() ) // Filter comms for the date that the user clicked on
+        fComms = fComms.map( (x, i) => {
+                return {
+                    id: i,
+                    name: x.title,
+                    location: '',
+                    startDate: new Date(x.date),
+                    color: 'red',
+                    endDate: new Date(x.date)
+                }
+            })
+        $('#calendar').data('calendar').setDataSource(fComms);
+    });
+
 }
 
 function deleteEvent(event) {
